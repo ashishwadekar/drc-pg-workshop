@@ -1,6 +1,5 @@
 # Installation and Setup for: What Lies Beneath ( your models )
 
-[![Join the chat at https://gitter.im/drc-pg-workshop/Lobby](https://badges.gitter.im/drc-pg-workshop/Lobby.svg)](https://gitter.im/drc-pg-workshop/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 This guide will help you install the optimal setup in order to have a productive time at the workshop.  Guide is currently written for Mac OS X, but it easy enough to follow along for any modern Linux distribution as well.
 
 ## Requirements
@@ -61,3 +60,4 @@ rvm: https://rvm.io/rvm/install
 ## Test if everything is working
 `./bin/rake` should work without errors, if it does, you're all set.
 
+### Chat, and further help
