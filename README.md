@@ -61,3 +61,6 @@ rvm: https://rvm.io/rvm/install
 `./bin/rake` should work without errors, if it does, you're all set.
 
 ### Chat, and further help
+
+[![Join the chat at https://gitter.im/drc-pg-workshop/Lobby](https://badges.gitter.im/drc-pg-workshop/Lobby.svg)](https://gitter.im/drc-pg-workshop/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
