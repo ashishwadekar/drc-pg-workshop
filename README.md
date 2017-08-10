@@ -56,6 +56,7 @@ rvm: https://rvm.io/rvm/install
 3. `cd drc-pg-workshop`
 4. Check Ruby version: `ruby -v` should show `2.4.1`
 5. `bundle install`
+6. `rails db:setup` for creating databases and running migrations
 
 ## Test if everything is working
 `./bin/rake` should work without errors, if it does, you're all set.
