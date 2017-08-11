@@ -18,6 +18,7 @@ WHERE restaurants.id = 1
 ORDER BY id ASC;
 
 --- given a branch, return menu items of the parent restaurant
+-- query 3
 
 SELECT menu_items.*
 FROM restaurant_branches
@@ -46,6 +47,19 @@ SELECT menu_items.*
 FROM restaurant_branch_menu_items AS r_b_m_i
   INNER JOIN menu_items ON r_b_m_i.menu_item_id = menu_items.id
 WHERE r_b_m_i.restaurant_branch_id = 1;
+
+
+SELECT "menu_items".*
+FROM (SELECT "menu_items".*
+      FROM "menu_items"
+        INNER JOIN "restaurant_menu_items" ON "menu_items"."id" = "restaurant_menu_items"."menu_item_id"
+      WHERE "restaurant_menu_items"."restaurant_id" = 1
+      UNION SELECT "menu_items".*
+            FROM "menu_items"
+              INNER JOIN "restaurant_branch_menu_items"
+                ON "menu_items"."id" = "restaurant_branch_menu_items"."menu_item_id"
+            WHERE "restaurant_branch_menu_items"."restaurant_branch_id" = 1)
+ORDER BY "menu_items"."id" ASC;
 
 
 --- get restaurants menu items of a branch
@@ -123,7 +137,8 @@ WHERE name = 'French fries with sausages  and vegetables';
 
 --- the constraint
 ALTER TABLE restaurant_branch_menu_items
-  ADD CONSTRAINT unique_item_in_restaurant CHECK (NOT dup_menu_item_in_restaurant(menu_item_id, restaurant_branch_id));
+  ADD CONSTRAINT unique_item_in_restaurant
+  CHECK (NOT dup_menu_item_in_restaurant(menu_item_id, restaurant_branch_id));
 
 --- a view for frequent lookups - all items
 DROP VIEW IF EXISTS branch_menus;

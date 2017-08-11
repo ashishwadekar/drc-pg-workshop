@@ -18,7 +18,7 @@ def create_branch(restaurant, system_user)
 
   number_of_branch_menu_items.times do
     branch.menu_items.create!(
-      name: Faker::Food.dish,
+      name: "#{Faker::Food.dish} #{SecureRandom.hex(2)}",
       description: Faker::Hipster.paragraph(2, false),
       price: Faker::Commerce.price,
     )
@@ -27,7 +27,7 @@ end
 
 def create_restaurant
   restaurant = Restaurant.create!(
-    name: "#{Faker::App.name} #{Faker::App.name}",
+    name: "#{Faker::App.name} #{Faker::App.name} #{SecureRandom.hex(2)}",
     description: Faker::Hipster.paragraph(2, false)
   )
 
@@ -40,7 +40,7 @@ def create_restaurant
 
   number_of_menu_items.times do
     restaurant.menu_items.create!(
-      name: Faker::Food.dish,
+      name: "#{Faker::Food.dish} #{SecureRandom.hex(2)}",
       description: Faker::Hipster.paragraph(2, false),
       price: Faker::Commerce.price,
     )

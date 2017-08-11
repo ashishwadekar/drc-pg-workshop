@@ -32,6 +32,62 @@ CREATE TYPE full_address AS (
 );
 
 
+--
+-- Name: cobranches(bigint); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION cobranches(br_id bigint) RETURNS TABLE(id bigint)
+    LANGUAGE sql
+    AS $$
+SELECT b2.id
+FROM
+  restaurant_branches b1
+  JOIN restaurant_branches b2 ON b1.restaurant_id = b2.restaurant_id
+WHERE b1.id = br_id;
+$$;
+
+
+--
+-- Name: dup_menu_item_in_restaurant(bigint, bigint); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION dup_menu_item_in_restaurant(item_id bigint, br_id bigint) RETURNS boolean
+    LANGUAGE sql
+    AS $$
+SELECT exists(
+    WITH item AS (SELECT name
+                  FROM menu_items
+                  WHERE id = item_id)
+    SELECT menu_items.name
+    FROM
+          cobranches(br_id) AS branches
+      INNER JOIN restaurant_branch_menu_items AS r_b_m_i ON r_b_m_i.restaurant_branch_id = branches.id
+      INNER JOIN menu_items ON r_b_m_i.menu_item_id = menu_items.id
+      LEFT JOIN item ON 1 = 1
+    WHERE lower(menu_items.name) = lower(item.name)
+    UNION
+    SELECT menu_items.name
+    FROM restaurant_menu_items_for_branch(br_id) AS menu_items LEFT JOIN item ON 1 = 1
+    WHERE lower(menu_items.name) = lower(item.name)
+);
+$$;
+
+
+--
+-- Name: restaurant_menu_items_for_branch(bigint); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION restaurant_menu_items_for_branch(br_id bigint) RETURNS TABLE(id bigint, name character varying, description character varying, price numeric)
+    LANGUAGE sql
+    AS $$
+SELECT menu_items.*
+FROM restaurant_branches
+  INNER JOIN restaurants ON restaurant_branches.id = br_id AND restaurant_branches.restaurant_id = restaurants.id
+  INNER JOIN restaurant_menu_items AS r_m_i ON restaurants.id = r_m_i.restaurant_id
+  INNER JOIN menu_items ON r_m_i.menu_item_id = menu_items.id
+$$;
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -116,7 +172,8 @@ ALTER SEQUENCE menu_items_id_seq OWNED BY menu_items.id;
 CREATE TABLE restaurant_branch_menu_items (
     id bigint NOT NULL,
     restaurant_branch_id integer,
-    menu_item_id integer
+    menu_item_id integer,
+    CONSTRAINT unique_item_in_restaurant CHECK ((NOT dup_menu_item_in_restaurant((menu_item_id)::bigint, (restaurant_branch_id)::bigint)))
 );
 
 
@@ -538,6 +595,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170810111959'),
 ('20170810112514'),
 ('20170810114149'),
-('20170810131251');
+('20170810131251'),
+('20170811024920'),
+('20170811025523');
 
 

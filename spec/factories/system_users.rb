@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :system_user do
-    restaurant nil
-    username "MyString"
-    password "MyString"
+    restaurant
+    username { Faker::Internet.user_name }
+    password { SecureRandom.hex(10) }
   end
 end
