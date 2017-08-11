@@ -14,7 +14,7 @@ def create_branch(restaurant, system_user)
 
   system_user.restaurant_branches << branch
 
-  number_of_branch_menu_items = rand(0..6) # between 0 and 5
+  number_of_branch_menu_items = 6
 
   number_of_branch_menu_items.times do
     branch.menu_items.create!(
@@ -36,7 +36,7 @@ def create_restaurant
     password: SecureRandom.hex(10),
   )
 
-  number_of_menu_items = rand(0..6) # between 0 and 5
+  number_of_menu_items = 6
 
   number_of_menu_items.times do
     restaurant.menu_items.create!(
@@ -46,7 +46,7 @@ def create_restaurant
     )
   end
 
-  number_of_branches = rand(0..6) # between 0 and 5
+  number_of_branches = 6
 
   number_of_branches.times do
     create_branch(restaurant, system_user)
