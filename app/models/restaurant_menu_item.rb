@@ -1,3 +1,4 @@
 class RestaurantMenuItem < ApplicationRecord
-  belongs_to :system_user
+  belongs_to :restaurant
+  belongs_to :menu_item
 end

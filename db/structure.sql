@@ -84,7 +84,7 @@ ALTER SEQUENCE branch_permissions_id_seq OWNED BY branch_permissions.id;
 
 CREATE TABLE menu_items (
     id bigint NOT NULL,
-    name character varying,
+    name character varying NOT NULL,
     description character varying,
     price numeric(10,2)
 );
@@ -116,8 +116,7 @@ ALTER SEQUENCE menu_items_id_seq OWNED BY menu_items.id;
 CREATE TABLE restaurant_branch_menu_items (
     id bigint NOT NULL,
     restaurant_branch_id integer,
-    menu_item_id integer,
-    system_user_id bigint
+    menu_item_id integer
 );
 
 
@@ -178,8 +177,7 @@ ALTER SEQUENCE restaurant_branches_id_seq OWNED BY restaurant_branches.id;
 CREATE TABLE restaurant_menu_items (
     id bigint NOT NULL,
     restaurant_id integer,
-    menu_item_id integer,
-    system_user_id bigint
+    menu_item_id integer
 );
 
 
@@ -441,24 +439,10 @@ ALTER TABLE ONLY wizards
 
 
 --
--- Name: index_restaurant_branch_menu_items_on_system_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_restaurant_branch_menu_items_on_system_user_id ON restaurant_branch_menu_items USING btree (system_user_id);
-
-
---
 -- Name: index_restaurant_branches_on_restaurant_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_restaurant_branches_on_restaurant_id ON restaurant_branches USING btree (restaurant_id);
-
-
---
--- Name: index_restaurant_menu_items_on_system_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_restaurant_menu_items_on_system_user_id ON restaurant_menu_items USING btree (system_user_id);
 
 
 --
@@ -469,19 +453,18 @@ CREATE INDEX index_system_users_on_restaurant_id ON system_users USING btree (re
 
 
 --
+-- Name: restaurant_name_uniqueness; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX restaurant_name_uniqueness ON restaurants USING btree (lower((name)::text));
+
+
+--
 -- Name: fk_rails_0680420eea; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY restaurant_branch_menu_items
     ADD CONSTRAINT fk_rails_0680420eea FOREIGN KEY (restaurant_branch_id) REFERENCES restaurant_branches(id) ON DELETE CASCADE;
-
-
---
--- Name: fk_rails_0f79c5fb78; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY restaurant_branch_menu_items
-    ADD CONSTRAINT fk_rails_0f79c5fb78 FOREIGN KEY (system_user_id) REFERENCES system_users(id);
 
 
 --
@@ -514,14 +497,6 @@ ALTER TABLE ONLY branch_permissions
 
 ALTER TABLE ONLY restaurant_branches
     ADD CONSTRAINT fk_rails_561eacd5c6 FOREIGN KEY (restaurant_id) REFERENCES restaurants(id);
-
-
---
--- Name: fk_rails_64f8793706; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY restaurant_menu_items
-    ADD CONSTRAINT fk_rails_64f8793706 FOREIGN KEY (system_user_id) REFERENCES system_users(id);
 
 
 --
@@ -562,6 +537,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170810102648'),
 ('20170810111959'),
 ('20170810112514'),
-('20170810114149');
+('20170810114149'),
+('20170810131251');
 
 
